@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Legacy AI</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            text-align: center;
+            padding: 50px;
+            background-color: #1a1a1a;
+            color: #f0f0f0;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background-color: #2a2a2a;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        h1 {
+            color: #4CAF50;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #video-container {
+            margin-top: 20px;
+            border: 2px solid #4CAF50;
+            border-radius: 10px;
+            overflow: hidden;
+            background-color: black;
+            height: 400px; /* Placeholder height */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Digital Legacy AI</h1>
+        <p>Talk to those you cherish, forever.</p>
+        <button id="start-button">Start Conversation</button>
+        <div id="video-container">
+            <video id="video-player" width="100%" height="100%" controls autoplay></video>
+        </div>
+    </div>
+
+    <script>
+        const startButton = document.getElementById('start-button');
+        const videoPlayer = document.getElementById('video-player');
+
+        // IMPORTANT: Replace 'YOUR_BACKEND_URL_HERE' with your actual live Replit URL.
+        const backendUrl = 'YOUR_BACKEND_URL_HERE'; 
+
+        startButton.addEventListener('click', async () => {
+            try {
+                // Change button text to show that it's working
+                startButton.textContent = "Connecting...";
+                startButton.disabled = true;
+
+                // Make a POST request to your backend server
+                const response = await fetch(backendUrl + '/api/converse', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        // We are sending placeholder data for this demo
+                        audioBase64: 'fake-audio-data',
+                        photoUrl: 'https://example.com/loved-one.jpg',
+                        personaData: 'A loving grandmother who enjoys gardening.'
+                    })
+                });
+
+                const data = await response.json();
+
+                // Set the video player source to the video URL from your backend
+                videoPlayer.src = data.videoUrl;
+
+            } catch (error) {
+                console.error("Error talking to the server:", error);
+                startButton.textContent = "Connection Failed. Try again.";
+            } finally {
+                // Restore the button after the process is complete
+                startButton.textContent = "Start Conversation";
+                startButton.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
